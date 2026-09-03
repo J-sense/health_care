@@ -1,0 +1,26 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Specialty {
+  id          String    @id @default(uuid())
+  title       String    @unique @db.VarChar(255)
+  description String    @db.Text
+  icons       String    @db.VarChar(255)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  isDeleted   Boolean   @default(false)
+  deletedAt   DateTime?
+
+  @@index([isDeleted], name: "specialty_is_deleted_index")
+  @@index([title], name: "specialty_title_index")
+  @@map("specialties")
+}
