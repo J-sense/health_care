@@ -17,6 +17,7 @@ const registerPatient = async (payload: {
   if (!data.user) {
     throw new Error("User registration failed");
   }
+  
   return data;
 };
 const loginUser = async (payload: { email: string; password: string }) => {
