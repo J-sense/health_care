@@ -1,5 +1,6 @@
 import { UserStatus } from "../../../generated/prisma";
 import { auth } from "../../lib/auth";
+import { prisma } from "../../lib/prisma";
 
 const registerPatient = async (payload: {
   name: string;
@@ -17,8 +18,20 @@ const registerPatient = async (payload: {
   if (!data.user) {
     throw new Error("User registration failed");
   }
-  
-  return data;
+  const patient = await prisma.$transaction(async (tx) => {
+    const patientTx = await tx.patient.create({
+      data: {
+        userId: data.user.id,
+        name: payload.name,
+        email: payload.email,
+      },
+    });
+    return patientTx;
+  });
+  return {
+    ...data,
+    patient,
+  };
 };
 const loginUser = async (payload: { email: string; password: string }) => {
   const { email, password } = payload;
