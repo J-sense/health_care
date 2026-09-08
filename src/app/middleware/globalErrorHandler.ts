@@ -1,16 +1,18 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextFunction, Request, Response } from "express";
 import z from "zod";
+import { AppError } from "../errorHelpers/AppError";
 import { TErrorResponse, TErrorSources } from "../../interface/error.interface";
 
 export const globalErrorHandler = (
-  err: any,
+  err: unknown,
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
+  void req;
+  void next;
   const errorSource: TErrorSources[] = [];
-  let statusCode: number = 500;
+  let statusCode = 500;
   let message = "Internal Server Error";
   if (err instanceof z.ZodError) {
     statusCode = 400;
@@ -21,11 +23,16 @@ export const globalErrorHandler = (
         message: issue.message,
       });
     });
+  } else if (err instanceof AppError) {
+    statusCode = err.statusCode;
+    message = err.message;
+  } else if (err instanceof Error) {
+    message = err.message;
   }
   const errorResponse: TErrorResponse = {
     success: false,
     message: message,
-    error: err,
+    error: statusCode === 500 ? "Internal Server Error" : message,
     errorSource,
   };
   res.status(statusCode).json(errorResponse);

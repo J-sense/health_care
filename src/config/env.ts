@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import { AppError } from "../app/errorHelpers/AppError";
 
 dotenv.config();
 interface EnvConfig {
@@ -16,7 +17,8 @@ const loadEnvConfig = (): EnvConfig => {
   ];
   for (const envVar of requiredEnvVars) {
     if (!process.env[envVar]) {
-      throw new Error(
+      throw new AppError(
+        404,
         `Environment variable ${envVar} is not set please set in .env file`,
       );
     }
