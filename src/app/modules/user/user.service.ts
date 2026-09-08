@@ -44,6 +44,13 @@ const createDoctor = async (payload: any) => {
           email: payload.doctor.email,
           gender: payload.doctor.gender,
           name: payload.doctor.name,
+          profilePhoto: payload.doctor.profilePhoto,
+          contactNumber: payload.doctor.contactNumber,
+          address: payload.doctor.address,
+          registrationNumber: payload.doctor.registrationNumber,
+          experience: payload.doctor.experience,
+          currentWorkingPlace: payload.doctor.currentWorkingPlace,
+          designation: payload.doctor.designation,
         },
       });
       const doctorSpecialtyData = specialties.map((sp) => {
