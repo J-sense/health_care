@@ -11,7 +11,7 @@ model Specialty {
 
     @@index([isDeleted], name: "specialty_is_deleted_index")
     @@index([title], name: "specialty_title_index")
-    @@map("specialties")
+    @@map("specialty")
 }
 
 model DoctorSpecialty {
@@ -22,4 +22,5 @@ model DoctorSpecialty {
     specialty   Specialty @relation(fields: [specialtyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
     @@unique([doctorId, specialtyId])
+    @@map("doctorSpecialty")
 }
